@@ -20,5 +20,12 @@ class HomeActivity : AppCompatActivity() {
             val intent = Intent(this, AddPostActivity::class.java)
             startActivity(intent)
         }
+
+        val ownProfile: Button = findViewById(R.id.ProfileButton)
+
+        ownProfile.setOnClickListener {
+            val intent = Intent(this, OwnProfileActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
