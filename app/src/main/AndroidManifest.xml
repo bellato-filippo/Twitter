@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TwitterMusk">
         <activity
+            android:name=".OwnProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".AddPostActivity"
             android:exported="false" />
         <activity
