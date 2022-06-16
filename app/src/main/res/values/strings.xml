@@ -7,14 +7,10 @@
     <string name="login_activity">Login activity</string>
     <string name="register">Register</string>
     <string name="name">Name</string>
-    <string name="name">Name</string>
-    <string name="name">Name</string>
-    <string name="last_name">Last name</string>
     <string name="last_name">Last name</string>
     <string name="email">Email</string>
-    <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="password">Password</string>
-    <string name="register">Register</string>
     <string name="already_have_an_account_log_in">Already have an account? Log in!</string>
+    <string name="new_post">New post</string>
+    <string name="type_something">Type something</string>
 </resources>
