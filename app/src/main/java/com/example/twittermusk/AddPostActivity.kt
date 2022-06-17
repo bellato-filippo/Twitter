@@ -41,42 +41,44 @@ class AddPostActivity : AppCompatActivity() {
         super.onStart()
 
         val createButton: Button = findViewById(R.id.CreateButton)
-        val addImage: Button = findViewById(R.id.AddImageButton)
-        val preview: ImageView = findViewById(R.id.postPreview)
+        //val addImage: Button = findViewById(R.id.AddImageButton)
+        //val preview: ImageView = findViewById(R.id.postPreview)
 
         val mail = intent.getStringExtra("own_mail").toString()
-        val text = findViewById<EditText>(R.id.MultiLineCreate).text.toString()
-        var uri : String
-
-        val getImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
-
-            val source = ImageDecoder.createSource(this.contentResolver, it)
-            val bitmap = ImageDecoder.decodeBitmap(source)
-
-            uri = "$mail/$uuid.jpg"
-
-            updatePic(bitmap, preview)
 
 
-            Log.d("prima di database", "$uuid $uri")
-            uploadImageToDB(it, uri)
-        }
+//        val getImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
+//
+//            val source = ImageDecoder.createSource(this.contentResolver, it)
+//            val bitmap = ImageDecoder.decodeBitmap(source)
+//
+//            uri = "$mail/$uuid.jpg"
+//
+//            updatePic(bitmap, preview)
+//
+//
+//            Log.d("prima di database", "$uuid $uri")
+//            uploadImageToDB(it, uri)
+//        }
 
-        addImage.setOnClickListener {
-            getImage.launch("image/*")
-        }
+//        addImage.setOnClickListener {
+//            getImage.launch("image/*")
+//        }
 
         createButton.setOnClickListener {
 
-            uri = "$mail/$uuid.jpg"
-            Log.d("quale è uuuidididid", "$uuid $uri")
+            //uri = "$mail/$uuid.jpg"
+            //Log.d("quale è uuuidididid", "$uuid $uri")
+
+            val text = findViewById<EditText>(R.id.MultiLineCreate).getText().toString()
+            var uri : String = ""
 
             Log.d("POST", "$mail $text $uri")
             // Create a new user with a first, middle, and last name
             val post = hashMapOf(
                 "user" to mail,
                 "text" to text,
-                "picture" to uri
+                "picture" to ""
             )
 
             // Add a new document with a generated ID
@@ -95,38 +97,38 @@ class AddPostActivity : AppCompatActivity() {
         }
     }
 
-    private fun updatePic(bitmap: Bitmap, picImage: ImageView) {
-        val imageHeight = bitmap.height
-        val imageWidth = bitmap.width
-        val proportion: Double
-        val metrics = resources.displayMetrics
-        val dpi = metrics.densityDpi
-        val pixels = 400 * (dpi / 160)
+//    private fun updatePic(bitmap: Bitmap, picImage: ImageView) {
+//        val imageHeight = bitmap.height
+//        val imageWidth = bitmap.width
+//        val proportion: Double
+//        val metrics = resources.displayMetrics
+//        val dpi = metrics.densityDpi
+//        val pixels = 400 * (dpi / 160)
+//
+//        if (imageHeight < imageWidth) {
+//            proportion = imageWidth.toDouble() / pixels.toDouble()
+//            val newHeight = imageHeight / proportion.roundToInt()
+//            picImage.setImageBitmap(Bitmap.createScaledBitmap(bitmap, pixels, newHeight, false))
+//        } else {
+//            proportion = imageHeight.toDouble() / pixels.toDouble()
+//            val newWidth = (imageWidth / proportion).roundToInt()
+//            picImage.setImageBitmap(Bitmap.createScaledBitmap(bitmap, newWidth, pixels, false))
+//        }
+//    }
 
-        if (imageHeight < imageWidth) {
-            proportion = imageWidth.toDouble() / pixels.toDouble()
-            val newHeight = imageHeight / proportion.roundToInt()
-            picImage.setImageBitmap(Bitmap.createScaledBitmap(bitmap, pixels, newHeight, false))
-        } else {
-            proportion = imageHeight.toDouble() / pixels.toDouble()
-            val newWidth = (imageWidth / proportion).roundToInt()
-            picImage.setImageBitmap(Bitmap.createScaledBitmap(bitmap, newWidth, pixels, false))
-        }
-    }
-
-    private fun uploadImageToDB(uriProfilePic: Uri?, uri: String) {
-
-        Log.d("dentro db", "$uuid $uri")
-        val pPicRef = storageReference.child(uri)
-
-        pPicRef.putFile(uriProfilePic!!)
-            .addOnSuccessListener {
-                Snackbar.make(
-                    findViewById(android.R.id.content),
-                    "Image Uploaded",
-                    Snackbar.LENGTH_LONG
-                ).show()
-            }
-    }
+//    private fun uploadImageToDB(uriProfilePic: Uri?, uri: String) {
+//
+//        Log.d("dentro db", "$uuid $uri")
+//        val pPicRef = storageReference.child(uri)
+//
+//        pPicRef.putFile(uriProfilePic!!)
+//            .addOnSuccessListener {
+//                Snackbar.make(
+//                    findViewById(android.R.id.content),
+//                    "Image Uploaded",
+//                    Snackbar.LENGTH_LONG
+//                ).show()
+//            }
+//    }
 
 }

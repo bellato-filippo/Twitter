@@ -39,8 +39,7 @@
         android:gravity="start|top"
         android:inputType="textMultiLine"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp
-"
+        android:layout_marginRight="16dp"
 
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/TextViewCreate"
@@ -68,7 +67,7 @@
         app:layout_constraintLeft_toRightOf="@id/AddImageButton"
         app:layout_constraintTop_toBottomOf="@id/MultiLineCreate"
          />
-
+<!--
     <ImageView
         android:id="@+id/postPreview"
         android:layout_width="400dp"
@@ -78,4 +77,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
+    -->
 </androidx.constraintlayout.widget.ConstraintLayout>

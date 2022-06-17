@@ -41,7 +41,7 @@ class HomeActivity : AppCompatActivity() {
 
         newPost.setOnClickListener {
             val intent = Intent(this, AddPostActivity::class.java)
-            intent.putExtra("user", ownMail)
+            intent.putExtra("own_mail", ownMail)
             startActivity(intent)
         }
 
@@ -72,6 +72,7 @@ class HomeActivity : AppCompatActivity() {
                 for (document in documents) {
                     me.add(document.data.getValue("following").toString())
                 }
+                me.add(ownMail)
 
                 Firebase.firestore.collection("posts")
                     .whereIn("user", me)
