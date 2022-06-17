@@ -48,6 +48,13 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-auth-ktx'
 
+
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:30.1.0')
+    // Declare the dependency for the Cloud Firestore library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+
     //firebase database dependency
     implementation 'com.google.firebase:firebase-database-ktx:20.0.4'
     implementation 'com.google.firebase:firebase-storage-ktx:20.0.1'
