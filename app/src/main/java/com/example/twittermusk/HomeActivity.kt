@@ -28,7 +28,7 @@ class HomeActivity : AppCompatActivity() {
 
         ownMail = intent.getStringExtra("own_mail").toString()
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-        getData(ownMail)
+        getData()
     }
 
 
@@ -37,6 +37,7 @@ class HomeActivity : AppCompatActivity() {
 
         val ownProfile: Button = findViewById(R.id.ProfileButton)
         val newPost: Button = findViewById(R.id.AddButton)
+        val refresh: Button = findViewById(R.id.refresh)
 //        val ownEmail = intent.getStringExtra("passed_mail").toString()
 
         newPost.setOnClickListener {
@@ -61,9 +62,13 @@ class HomeActivity : AppCompatActivity() {
             intent.putExtra("own_mail", ownMail)
             startActivity(intent)
         }
+
+        refresh.setOnClickListener {
+            getData()
+        }
     }
 
-    fun getData(user: String) {
+    fun getData() {
         db.collection("follow")
             .whereEqualTo("me", ownMail)
             .get()

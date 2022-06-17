@@ -1,6 +1,7 @@
 package com.example.twittermusk.adapter
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.twittermusk.HomeActivity
 import com.example.twittermusk.R
@@ -77,7 +79,6 @@ class PostAdapter(
                             .add(f)
                             .addOnSuccessListener { documentReference ->
                                 Log.d(ContentValues.TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                                val intent = Intent(context, HomeActivity::class.java)
                             }
                             .addOnFailureListener { e ->
                                 Log.w(ContentValues.TAG, "Error adding document", e)

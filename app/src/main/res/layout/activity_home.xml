@@ -19,7 +19,9 @@
 
         android:minHeight="48dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/SearchButton"
+        />
 
     <Button
         android:id="@+id/SearchButton"
@@ -30,8 +32,21 @@
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@id/EditTextSearch"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toRightOf="@id/refresh"
+        app:layout_constraintBottom_toTopOf="@id/AddButton"
+        />
 
+    <Button
+        android:id="@+id/refresh"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:text="ref"
+        android:layout_marginTop="16dp"
+
+
+        app:layout_constraintLeft_toRightOf="@id/SearchButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         />
 
     <Button
