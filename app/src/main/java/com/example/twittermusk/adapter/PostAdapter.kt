@@ -51,6 +51,33 @@ class PostAdapter(
                 Toast.makeText(context, "You can't follow yourself", Toast.LENGTH_SHORT).show()
             }
 
+            Firebase.firestore.collection("follow")
+                .whereEqualTo("me", self)
+                .get()
+                .addOnSuccessListener { documents ->
+                    val me = mutableListOf<String>()
+                    for (document in documents) {
+                        me.add(document.data.getValue("following").toString())
+                    }
+
+                    if (me.contains(other)) {
+                        Toast.makeText(context, "You already follow this user", Toast.LENGTH_SHORT).show()
+                    } else {
+                        val f = hashMapOf(
+                            "me" to self,
+                            "following" to other
+                        )
+
+                        Firebase.firestore.collection("follow")
+                            .add(f)
+                            .addOnSuccessListener { documentReference ->
+                                Log.d(ContentValues.TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(ContentValues.TAG, "Error adding document", e)
+                            }
+                    }
+                }
 
         }
 

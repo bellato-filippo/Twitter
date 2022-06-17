@@ -64,31 +64,43 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun getData(user: String) {
-        db.collection("posts")
-            .whereEqualTo("user", user)
+        db.collection("follow")
+            .whereEqualTo("me", ownMail)
             .get()
             .addOnSuccessListener { documents ->
-                val p = mutableListOf<Post>()
+                val me = mutableListOf<String>()
                 for (document in documents) {
-                    val email: String = document.data.getValue("user").toString()
-                    val uri: String = if (document.data.getValue("picture") == null){
-                        ""
-                    } else {
-                        document.data.getValue("picture").toString()
-                    }
-                    //val picture: String = document.data.getValue("picture").toString()
-                    val text: String = document.data.getValue("text").toString()
-
-                    val post = Post(email, uri, text)
-                    Log.d(TAG, "${p.size}")
-                    p.add(post)
+                    me.add(document.data.getValue("following").toString())
                 }
-                myDataset = p
-                recyclerView.adapter = PostAdapter(this, myDataset, ownMail, ownMail)
-                recyclerView.setHasFixedSize(true)
+
+                Firebase.firestore.collection("posts")
+                    .whereIn("user", me)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        val p = mutableListOf<Post>()
+                        for (document in documents) {
+                            val email: String = document.data.getValue("user").toString()
+                            val uri: String = if (document.data.getValue("picture") == null){
+                                ""
+                            } else {
+                                document.data.getValue("picture").toString()
+                            }
+                            //val picture: String = document.data.getValue("picture").toString()
+                            val text: String = document.data.getValue("text").toString()
+
+                            val post = Post(email, uri, text)
+                            Log.d(TAG, "${p.size}")
+                            p.add(post)
+                        }
+                        myDataset = p
+                        recyclerView.adapter = PostAdapter(this, myDataset, ownMail, ownMail)
+                        recyclerView.setHasFixedSize(true)
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.w(TAG, "Error getting documents: ", exception)
+                    }
             }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents: ", exception)
-            }
+
+
     }
 }
