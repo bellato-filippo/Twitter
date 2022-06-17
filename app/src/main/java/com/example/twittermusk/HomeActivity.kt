@@ -65,10 +65,10 @@ class HomeActivity : AppCompatActivity() {
                 val p = mutableListOf<Post>()
                 for (document in documents) {
                     val email: String = document.data.getValue("user").toString()
-                    val uri: Uri? = if (document.data.getValue("picture") == null){
-                        null
+                    val uri: String = if (document.data.getValue("picture") == null){
+                        ""
                     } else {
-                        Uri.parse(document.data.getValue("picture").toString())
+                        document.data.getValue("picture").toString()
                     }
                     //val picture: String = document.data.getValue("picture").toString()
                     val text: String = document.data.getValue("text").toString()
