@@ -55,6 +55,11 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-firestore-ktx'
 
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.2")
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
+
+
     //firebase database dependency
     implementation 'com.google.firebase:firebase-database-ktx:20.0.4'
     implementation 'com.google.firebase:firebase-storage-ktx:20.0.1'

@@ -14,7 +14,10 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val myDataset = PostSource().loadPost()
+        val ownEmail = intent.getStringExtra("passed_mail").toString()
+
+
+        val myDataset = PostSource().loadPost(ownEmail)
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.adapter = PostAdapter(this, myDataset)
 
@@ -30,6 +33,7 @@ class HomeActivity : AppCompatActivity() {
 
         newPost.setOnClickListener {
             val intent = Intent(this, AddPostActivity::class.java)
+            intent.putExtra("user", ownEmail)
             startActivity(intent)
         }
 
