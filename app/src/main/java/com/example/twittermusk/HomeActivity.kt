@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.twittermusk.adapter.PostAdapter
@@ -53,10 +54,18 @@ class HomeActivity : AppCompatActivity() {
             intent.putExtra("own_email", ownEmail)
             startActivity(intent)
         }
+
+        val search: Button = findViewById(R.id.SearchButton)
+
+        search.setOnClickListener {
+            val intent = Intent(this, ListUserActivity::class.java)
+            val name = findViewById<EditText>(R.id.EditTextSearch).getText().toString()
+            intent.putExtra("user", name)
+            startActivity(intent)
+        }
     }
 
     fun trya(user: String) {
-        val posts = mutableListOf<Post>()
         Log.d("DEBUG", "Inside the function")
         db.collection("posts")
             .whereEqualTo("user", user)
