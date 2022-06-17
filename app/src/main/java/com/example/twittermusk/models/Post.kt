@@ -4,7 +4,7 @@ import android.net.Uri
 import android.widget.ImageView
 
 class Post(val user: String?,
-           val pic: Uri?,
+           val picture: Uri?,
            val text: String?) {
 
 }

@@ -48,6 +48,7 @@ class AddPostActivity : AppCompatActivity() {
                 }
 
             val intent = Intent(this, HomeActivity::class.java)
+            intent.putExtra("passed_mail", mail)
             startActivity(intent)
         }
     }
