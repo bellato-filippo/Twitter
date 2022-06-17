@@ -13,11 +13,19 @@
         android:layout_marginTop="16dp"
         android:text="@string/email"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/profileButton"
+        app:layout_constraintStart_toEndOf="@+id/profile_pic"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/profileButton"
+    <Button
+        android:id="@+id/change_pic"
+        android:layout_width="238dp"
+        android:layout_height="42dp"
+        android:text="change profile picture"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_pic" />
+
+    <ImageView
+        android:id="@+id/profile_pic"
         android:layout_width="238dp"
         android:layout_height="238dp"
         app:layout_constraintStart_toStartOf="parent"

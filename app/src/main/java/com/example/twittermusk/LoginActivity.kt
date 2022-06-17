@@ -54,6 +54,8 @@ class LoginActivity : AppCompatActivity() {
                         Log.d(TAG, "signInWithEmail:success")
                         val user = auth.currentUser
                         val intent = Intent(this, HomeActivity::class.java)
+                        Log.d("mail1",emailstr)
+                        intent.putExtra("passed_mail",emailstr)
                         startActivity(intent)
                         //updateUI(user)
                     } else {

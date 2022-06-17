@@ -3,6 +3,7 @@ package com.example.twittermusk
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.example.twittermusk.adapter.PostAdapter
@@ -24,6 +25,8 @@ class HomeActivity : AppCompatActivity() {
         super.onStart()
 
         val newPost: Button = findViewById(R.id.AddButton)
+        val ownEmail = intent.getStringExtra("passed_mail").toString()
+        Log.d("mail2",ownEmail)
 
         newPost.setOnClickListener {
             val intent = Intent(this, AddPostActivity::class.java)
@@ -34,6 +37,8 @@ class HomeActivity : AppCompatActivity() {
 
         ownProfile.setOnClickListener {
             val intent = Intent(this, OwnProfileActivity::class.java)
+            Log.d("mail3",ownEmail)
+            intent.putExtra("own_email", ownEmail)
             startActivity(intent)
         }
     }
