@@ -15,7 +15,6 @@ import com.example.twittermusk.adapter.PostAdapter
 import com.example.twittermusk.models.Post
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-
 class HomeActivity : AppCompatActivity() {
 
     val db = Firebase.firestore
@@ -36,9 +35,9 @@ class HomeActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
+        val ownProfile: Button = findViewById(R.id.ProfileButton)
         val newPost: Button = findViewById(R.id.AddButton)
         val ownEmail = intent.getStringExtra("passed_mail").toString()
-        Log.d("mail2",ownEmail)
 
         newPost.setOnClickListener {
             val intent = Intent(this, AddPostActivity::class.java)
@@ -46,11 +45,9 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val ownProfile: Button = findViewById(R.id.ProfileButton)
 
         ownProfile.setOnClickListener {
             val intent = Intent(this, OwnProfileActivity::class.java)
-            Log.d("mail3",ownEmail)
             intent.putExtra("own_email", ownEmail)
             startActivity(intent)
         }

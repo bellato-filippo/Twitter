@@ -37,7 +37,7 @@ class OwnProfileActivity : AppCompatActivity() {
 
         storage = FirebaseStorage.getInstance()
         storageReference = storage.reference
-
+        Log.d("testprecrash0","$ownEmail")
         username.text = "Username:\n$ownEmail"
         loadPic(ownEmail, picImage)
 
