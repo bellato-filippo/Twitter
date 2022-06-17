@@ -78,7 +78,9 @@ class HomeActivity : AppCompatActivity() {
                     .get()
                     .addOnSuccessListener { documents ->
                         val p = mutableListOf<Post>()
+                        val keys = mutableListOf<String>()
                         for (document in documents) {
+                            keys.add(document.id)
                             val email: String = document.data.getValue("user").toString()
                             val uri: String = if (document.data.getValue("picture") == null){
                                 ""
@@ -93,7 +95,7 @@ class HomeActivity : AppCompatActivity() {
                             p.add(post)
                         }
                         myDataset = p
-                        recyclerView.adapter = PostAdapter(this, myDataset, ownMail, ownMail)
+                        recyclerView.adapter = PostAdapter(this, myDataset, ownMail, ownMail, keys)
                         recyclerView.setHasFixedSize(true)
                     }
                     .addOnFailureListener { exception ->

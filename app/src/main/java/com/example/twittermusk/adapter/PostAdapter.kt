@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.twittermusk.R
 import com.example.twittermusk.models.Post
+import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.FieldPath.documentId
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -20,7 +22,8 @@ class PostAdapter(
     private val context: Context,
     private val dataSet: List<Post>,
     private val self: String,
-    private val other: String
+    private val other: String,
+    private val keys: List<String>
     ): RecyclerView.Adapter<PostAdapter.ItemViewHolder>() {
 
     class ItemViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
@@ -28,6 +31,7 @@ class PostAdapter(
         val textViewText: TextView = view.findViewById(R.id.postText)
         val buttonFollow: Button = view.findViewById<Button>(R.id.followButton)
         val buttonLike: Button = view.findViewById(R.id.likeButton)
+        val like: TextView = view.findViewById(R.id.like)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -45,7 +49,6 @@ class PostAdapter(
         val item = dataSet[position]
         holder.textViewUser.text = item.user
         holder.textViewText.text = item.text
-
         holder.buttonFollow.setOnClickListener {
             if (self.equals(other)) {
                 Toast.makeText(context, "You can't follow yourself", Toast.LENGTH_SHORT).show()
@@ -82,7 +85,45 @@ class PostAdapter(
         }
 
         holder.buttonLike.setOnClickListener {
+            Firebase.firestore.collection("like")
+                .whereEqualTo("user", self)
+                .get()
+                .addOnSuccessListener { documents ->
+                    val me = mutableListOf<String>()
+                    for (document in documents) {
+                        me.add(document.data.getValue("post").toString())
+                    }
 
+                    if (me.contains(keys[position])) {
+                        Toast.makeText(context, "You already liked this post", Toast.LENGTH_SHORT).show()
+                    } else {
+                        val l = hashMapOf(
+                            "user" to self,
+                            "post" to keys[position]
+                        )
+                        Firebase.firestore.collection("like")
+                            .add(l)
+                            .addOnSuccessListener { documentReference ->
+                                Log.d(ContentValues.TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                                Firebase.firestore.collection("like")
+                                    .whereEqualTo("post", keys[position])
+                                    .get()
+                                    .addOnSuccessListener { documents ->
+                                        holder.like.text = documents.size().toString()
+                                    }
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(ContentValues.TAG, "Error adding document", e)
+                            }
+                    }
+                }
         }
+
+        Firebase.firestore.collection("like")
+            .whereEqualTo("post", keys[position])
+            .get()
+            .addOnSuccessListener { documents ->
+                holder.like.text = documents.size().toString()
+            }
     }
 }
