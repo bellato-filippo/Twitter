@@ -18,7 +18,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -46,8 +45,8 @@ class AddPostActivity : AppCompatActivity() {
         val preview: ImageView = findViewById(R.id.postPreview)
 
         val mail = intent.getStringExtra("user").toString()
-        val text = findViewById<EditText>(R.id.MultiLineCreate).getText().toString()
-        var uri: String = ""
+        val text = findViewById<EditText>(R.id.MultiLineCreate).text.toString()
+        var uri : String
 
         val getImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
 
@@ -59,8 +58,8 @@ class AddPostActivity : AppCompatActivity() {
             updatePic(bitmap, preview)
 
 
-            Log.d("quale è uuuidididid prima di database", "$uuid $uri")
-            uploadImageToDB(mail, it, uri)
+            Log.d("prima di database", "$uuid $uri")
+            uploadImageToDB(it, uri)
         }
 
         addImage.setOnClickListener {
@@ -115,9 +114,9 @@ class AddPostActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadImageToDB(s: String, uriProfilePic: Uri?, uri: String) {
+    private fun uploadImageToDB(uriProfilePic: Uri?, uri: String) {
 
-        Log.d("quale è uuuidididid dentro db", "$uuid $uri")
+        Log.d("dentro db", "$uuid $uri")
         val pPicRef = storageReference.child(uri)
 
         pPicRef.putFile(uriProfilePic!!)
