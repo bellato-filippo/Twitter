@@ -1,21 +1,62 @@
 package com.example.twittermusk.data
 
+import android.content.ContentValues.TAG
+import android.net.Uri
+import android.util.Log
 import com.example.twittermusk.models.Post
+import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class PostSource {
-    fun loadPost(): List<Post> {
-        val post1: Post = Post(1, "user 1", "prova1", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus hendrerit molestie semper. Pellentesque vel elementum tortor. Curabitur maximus vestibulum felis id tempor. Sed viverra tortor eget diam finibus bibendum. Sed tortor odio, laoreet eget auctor ut, feugiat ac massa. Mauris semper rutrum sagittis. Sed sagittis mi dignissim ex aliquam facilisis. Quisque tristique augue purus, in fermentum libero rhoncus eu. Pellentesque aliquam lectus a volutpat porttitor. In ipsum ligula, blandit quis metus ac, efficitur malesuada massa.")
-        val post2: Post = Post(1, "user 2", "prova2", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus hendrerit molestie semper. Pellentesque vel elementum tortor. Curabitur maximus vestibulum felis id tempor. Sed viverra tortor eget diam finibus bibendum. Sed tortor odio, laoreet eget auctor ut, feugiat ac massa. Mauris semper rutrum sagittis. Sed sagittis mi dignissim ex aliquam facilisis. Quisque tristique augue purus, in fermentum libero rhoncus eu. Pellentesque aliquam lectus a volutpat porttitor. In ipsum ligula, blandit quis metus ac, efficitur malesuada massa.")
-        val post3: Post = Post(1, "user 3", "prova3", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus hendrerit molestie semper. Pellentesque vel elementum tortor. Curabitur maximus vestibulum felis id tempor. Sed viverra tortor eget diam finibus bibendum. Sed tortor odio, laoreet eget auctor ut, feugiat ac massa. Mauris semper rutrum sagittis. Sed sagittis mi dignissim ex aliquam facilisis. Quisque tristique augue purus, in fermentum libero rhoncus eu. Pellentesque aliquam lectus a volutpat porttitor. In ipsum ligula, blandit quis metus ac, efficitur malesuada massa.")
 
-        val post4: Post = Post(1, "user 4", "prova1", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus hendrerit molestie semper. Pellentesque vel elementum tortor. Curabitur maximus vestibulum felis id tempor. Sed viverra tortor eget diam finibus bibendum. Sed tortor odio, laoreet eget auctor ut, feugiat ac massa. Mauris semper rutrum sagittis. Sed sagittis mi dignissim ex aliquam facilisis. Quisque tristique augue purus, in fermentum libero rhoncus eu. Pellentesque aliquam lectus a volutpat porttitor. In ipsum ligula, blandit quis metus ac, efficitur malesuada massa.")
-        val post5: Post = Post(1, "user 5", "prova2", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus hendrerit molestie semper. Pellentesque vel elementum tortor. Curabitur maximus vestibulum felis id tempor. Sed viverra tortor eget diam finibus bibendum. Sed tortor odio, laoreet eget auctor ut, feugiat ac massa. Mauris semper rutrum sagittis. Sed sagittis mi dignissim ex aliquam facilisis. Quisque tristique augue purus, in fermentum libero rhoncus eu. Pellentesque aliquam lectus a volutpat porttitor. In ipsum ligula, blandit quis metus ac, efficitur malesuada massa.")
-        val post6: Post = Post(1, "user 6", "prova3", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus hendrerit molestie semper. Pellentesque vel elementum tortor. Curabitur maximus vestibulum felis id tempor. Sed viverra tortor eget diam finibus bibendum. Sed tortor odio, laoreet eget auctor ut, feugiat ac massa. Mauris semper rutrum sagittis. Sed sagittis mi dignissim ex aliquam facilisis. Quisque tristique augue purus, in fermentum libero rhoncus eu. Pellentesque aliquam lectus a volutpat porttitor. In ipsum ligula, blandit quis metus ac, efficitur malesuada massa.")
+    val db = Firebase.firestore
 
-        val post7: Post = Post(1, "user 7", "prova1", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus hendrerit molestie semper. Pellentesque vel elementum tortor. Curabitur maximus vestibulum felis id tempor. Sed viverra tortor eget diam finibus bibendum. Sed tortor odio, laoreet eget auctor ut, feugiat ac massa. Mauris semper rutrum sagittis. Sed sagittis mi dignissim ex aliquam facilisis. Quisque tristique augue purus, in fermentum libero rhoncus eu. Pellentesque aliquam lectus a volutpat porttitor. In ipsum ligula, blandit quis metus ac, efficitur malesuada massa.")
-        val post8: Post = Post(1, "user 8", "prova2", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus hendrerit molestie semper. Pellentesque vel elementum tortor. Curabitur maximus vestibulum felis id tempor. Sed viverra tortor eget diam finibus bibendum. Sed tortor odio, laoreet eget auctor ut, feugiat ac massa. Mauris semper rutrum sagittis. Sed sagittis mi dignissim ex aliquam facilisis. Quisque tristique augue purus, in fermentum libero rhoncus eu. Pellentesque aliquam lectus a volutpat porttitor. In ipsum ligula, blandit quis metus ac, efficitur malesuada massa.")
-        val post9: Post = Post(1, "user 9", "prova3", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus hendrerit molestie semper. Pellentesque vel elementum tortor. Curabitur maximus vestibulum felis id tempor. Sed viverra tortor eget diam finibus bibendum. Sed tortor odio, laoreet eget auctor ut, feugiat ac massa. Mauris semper rutrum sagittis. Sed sagittis mi dignissim ex aliquam facilisis. Quisque tristique augue purus, in fermentum libero rhoncus eu. Pellentesque aliquam lectus a volutpat porttitor. In ipsum ligula, blandit quis metus ac, efficitur malesuada massa.")
 
-        return listOf<Post>(post1, post2, post3, post4, post5, post6, post7, post8, post9)
+    fun loadPost(user: String): List<Post> {
+
+
+
+        return listOf<Post>()
+
+//        val posts = mutableListOf<Post>()
+//        db.collection("posts")
+//            .whereEqualTo("user", user)
+//            .get()
+//            .addOnSuccessListener { documents ->
+//                for (document in documents) {
+//                    val email: String = document.data.getValue("user").toString()
+//                    val uri: Uri? = if (document.data.getValue("picture") == null){
+//                        null
+//                    } else {
+//                        Uri.parse(document.data.getValue("picture").toString())
+//                    }
+//                    //val picture: String = document.data.getValue("picture").toString()
+//                    val text: String = document.data.getValue("text").toString()
+//
+//                    val post = Post(email, uri, text)
+//                    Log.d(TAG, "${posts.size}")
+//                    posts.add(post)
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.w(TAG, "Error getting documents: ", exception)
+//            }
+//
+//        return posts
     }
+
+}
+
+interface ResultListener {
+    fun onResult(data: List<Post>)
+    fun onError(error: Throwable)
 }

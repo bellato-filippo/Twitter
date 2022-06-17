@@ -56,6 +56,10 @@ class LoginActivity : AppCompatActivity() {
                         val intent = Intent(this, HomeActivity::class.java)
                         Log.d("mail1",emailstr)
                         intent.putExtra("passed_mail",emailstr)
+                        //intent.putExtra("user", user)
+                        if (user != null) {
+                            Log.d("USER", user.email.toString())
+                        }
                         startActivity(intent)
                         //updateUI(user)
                     } else {
