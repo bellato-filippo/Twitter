@@ -15,18 +15,23 @@ class ListUserActivity : AppCompatActivity() {
     val db = Firebase.firestore
     var myDataset = mutableListOf<Post>()
     lateinit var recyclerView: RecyclerView
+    var ownMail: String = ""
+    var otherMail: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_user)
 
-        val user = intent.getStringExtra("user").toString()
+        ownMail = intent.getStringExtra("own_mail").toString()
+        otherMail = intent.getStringExtra("other_mail").toString()
 
-        Log.d("DEBUG", user)
+        Log.d("DEBUG", ownMail)
+        Log.d("DEBUG", otherMail)
+
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
 
         db.collection("posts")
-            .whereEqualTo("user", user)
+            .whereEqualTo("user", otherMail)
             .get()
             .addOnSuccessListener { documents ->
                 val p = mutableListOf<Post>()
@@ -45,7 +50,7 @@ class ListUserActivity : AppCompatActivity() {
                     p.add(post)
                 }
                 myDataset = p
-                recyclerView.adapter = PostAdapter(this, myDataset)
+                recyclerView.adapter = PostAdapter(this, myDataset, ownMail, otherMail)
                 recyclerView.setHasFixedSize(true)
             }
             .addOnFailureListener { exception ->

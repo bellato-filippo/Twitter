@@ -7,7 +7,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.twittermusk.R
 import com.example.twittermusk.models.Post
@@ -16,12 +18,16 @@ import com.google.firebase.ktx.Firebase
 
 class PostAdapter(
     private val context: Context,
-    private val dataSet: List<Post>
+    private val dataSet: List<Post>,
+    private val self: String,
+    private val other: String
     ): RecyclerView.Adapter<PostAdapter.ItemViewHolder>() {
 
     class ItemViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
         val textViewUser: TextView = view.findViewById(R.id.postUser)
         val textViewText: TextView = view.findViewById(R.id.postText)
+        val buttonFollow: Button = view.findViewById<Button>(R.id.followButton)
+        val buttonLike: Button = view.findViewById(R.id.likeButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -39,6 +45,17 @@ class PostAdapter(
         val item = dataSet[position]
         holder.textViewUser.text = item.user
         holder.textViewText.text = item.text
-    }
 
+        holder.buttonFollow.setOnClickListener {
+            if (self.equals(other)) {
+                Toast.makeText(context, "You can't follow yourself", Toast.LENGTH_SHORT).show()
+            }
+
+
+        }
+
+        holder.buttonLike.setOnClickListener {
+
+        }
+    }
 }

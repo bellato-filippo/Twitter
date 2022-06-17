@@ -44,7 +44,7 @@ class AddPostActivity : AppCompatActivity() {
         val addImage: Button = findViewById(R.id.AddImageButton)
         val preview: ImageView = findViewById(R.id.postPreview)
 
-        val mail = intent.getStringExtra("user").toString()
+        val mail = intent.getStringExtra("own_mail").toString()
         val text = findViewById<EditText>(R.id.MultiLineCreate).text.toString()
         var uri : String
 
@@ -90,7 +90,7 @@ class AddPostActivity : AppCompatActivity() {
                 }
 
             val intent = Intent(this, HomeActivity::class.java)
-            intent.putExtra("passed_mail", mail)
+            intent.putExtra("own_mail", mail)
             startActivity(intent)
         }
     }

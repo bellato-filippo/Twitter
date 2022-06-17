@@ -20,15 +20,15 @@ class HomeActivity : AppCompatActivity() {
     val db = Firebase.firestore
     var myDataset = mutableListOf<Post>()
     lateinit var recyclerView: RecyclerView
+    var ownMail: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val ownEmail = intent.getStringExtra("passed_mail").toString()
+        ownMail = intent.getStringExtra("own_mail").toString()
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-        Log.d("DEBUG", "trya succesfully called")
-        trya(ownEmail)
+        getData(ownMail)
     }
 
 
@@ -37,18 +37,18 @@ class HomeActivity : AppCompatActivity() {
 
         val ownProfile: Button = findViewById(R.id.ProfileButton)
         val newPost: Button = findViewById(R.id.AddButton)
-        val ownEmail = intent.getStringExtra("passed_mail").toString()
+//        val ownEmail = intent.getStringExtra("passed_mail").toString()
 
         newPost.setOnClickListener {
             val intent = Intent(this, AddPostActivity::class.java)
-            intent.putExtra("user", ownEmail)
+            intent.putExtra("user", ownMail)
             startActivity(intent)
         }
 
 
         ownProfile.setOnClickListener {
             val intent = Intent(this, OwnProfileActivity::class.java)
-            intent.putExtra("own_email", ownEmail)
+            intent.putExtra("own_email", ownMail)
             startActivity(intent)
         }
 
@@ -57,13 +57,13 @@ class HomeActivity : AppCompatActivity() {
         search.setOnClickListener {
             val intent = Intent(this, ListUserActivity::class.java)
             val name = findViewById<EditText>(R.id.EditTextSearch).getText().toString()
-            intent.putExtra("user", name)
+            intent.putExtra("other_mail", name)
+            intent.putExtra("own_mail", ownMail)
             startActivity(intent)
         }
     }
 
-    fun trya(user: String) {
-        Log.d("DEBUG", "Inside the function")
+    fun getData(user: String) {
         db.collection("posts")
             .whereEqualTo("user", user)
             .get()
@@ -84,7 +84,7 @@ class HomeActivity : AppCompatActivity() {
                     p.add(post)
                 }
                 myDataset = p
-                recyclerView.adapter = PostAdapter(this, myDataset)
+                recyclerView.adapter = PostAdapter(this, myDataset, ownMail, ownMail)
                 recyclerView.setHasFixedSize(true)
             }
             .addOnFailureListener { exception ->
