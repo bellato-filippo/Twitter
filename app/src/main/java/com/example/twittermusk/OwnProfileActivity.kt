@@ -1,5 +1,6 @@
 package com.example.twittermusk
 
+import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
@@ -13,7 +14,12 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
+import com.example.twittermusk.adapter.PostAdapter
+import com.example.twittermusk.models.Post
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlin.math.roundToInt
@@ -23,6 +29,10 @@ class OwnProfileActivity : AppCompatActivity() {
 
     private lateinit var storage: FirebaseStorage
     private lateinit var storageReference: StorageReference
+    private lateinit var ownProfilePost: RecyclerView
+    private var ownEmail: String = ""
+    private var myDataset = mutableListOf<Post>()
+
 
     @RequiresApi(Build.VERSION_CODES.P)
 
@@ -30,10 +40,11 @@ class OwnProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_own_profile)
 
-        val ownEmail = intent.getStringExtra("own_email").toString()
+        ownEmail = intent.getStringExtra("own_email").toString()
         val picChange: Button = findViewById(R.id.change_pic)
         val picImage: ImageView = findViewById(R.id.profile_pic)
         val username: TextView = findViewById(R.id.Username)
+        ownProfilePost = findViewById(R.id.profile_posts)
 
         storage = FirebaseStorage.getInstance()
         storageReference = storage.reference
@@ -58,11 +69,16 @@ class OwnProfileActivity : AppCompatActivity() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        getData()
+    }
+
     private fun loadPic(mail: String, picImage: ImageView) {
         try {
             val maxDownloadSize = 10L * 1024 * 1024
-            storageReference.child("$mail/profilePic.jpg").getBytes(maxDownloadSize).addOnCompleteListener {
-                    val bitmap = BitmapFactory.decodeByteArray(it.result, 0, it.result.size)
+            storageReference.child("$mail/profilePic.jpg").getBytes(maxDownloadSize).addOnSuccessListener {
+                    val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
                     updatePic(bitmap, picImage)
                 }
         } catch (e: Exception) {
@@ -104,6 +120,37 @@ class OwnProfileActivity : AppCompatActivity() {
                     "Image Uploaded",
                     Snackbar.LENGTH_LONG
                 ).show()
+            }
+    }
+
+    private fun getData(){
+        Firebase.firestore.collection("posts")
+            .whereEqualTo("user", ownEmail)
+            .get()
+            .addOnSuccessListener { documents ->
+                val p = mutableListOf<Post>()
+                val keys = mutableListOf<String>()
+                for (document in documents) {
+                    keys.add(document.id)
+                    val email: String = document.data.getValue("user").toString()
+                    val uri: String = if (document.data.getValue("picture") == null){
+                        ""
+                    } else {
+                        document.data.getValue("picture").toString()
+                    }
+                    //val picture: String = document.data.getValue("picture").toString()
+                    val text: String = document.data.getValue("text").toString()
+
+                    val post = Post(email, uri, text)
+                    Log.d(ContentValues.TAG, "${p.size}")
+                    p.add(post)
+                }
+                myDataset = p
+                ownProfilePost.adapter = PostAdapter(this, myDataset, ownEmail, ownEmail, keys)
+                ownProfilePost.setHasFixedSize(true)
+            }
+            .addOnFailureListener { exception ->
+                Log.w(ContentValues.TAG, "Error getting documents: ", exception)
             }
     }
 }

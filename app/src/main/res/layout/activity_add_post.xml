@@ -67,15 +67,38 @@
         app:layout_constraintLeft_toRightOf="@id/AddImageButton"
         app:layout_constraintTop_toBottomOf="@id/MultiLineCreate"
          />
-<!--
+
     <ImageView
-        android:id="@+id/postPreview"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        android:layout_marginBottom="4dp"
+        android:id="@+id/previewPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AddImageButton"
         tools:srcCompat="@tools:sample/avatars" />
-    -->
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <!--
+        <ImageView
+            android:id="@+id/postPreview"
+            android:layout_width="400dp"
+            android:layout_height="400dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+        -->
 </androidx.constraintlayout.widget.ConstraintLayout>

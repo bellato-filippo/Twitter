@@ -8,9 +8,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -41,59 +43,74 @@ class AddPostActivity : AppCompatActivity() {
         super.onStart()
 
         val createButton: Button = findViewById(R.id.CreateButton)
-        //val addImage: Button = findViewById(R.id.AddImageButton)
-        //val preview: ImageView = findViewById(R.id.postPreview)
+        val addImage: Button = findViewById(R.id.AddImageButton)
+        val preview: ImageView = findViewById(R.id.previewPost)
+        val loading: ProgressBar = findViewById(R.id.progressBar)
+        loading.visibility = View.INVISIBLE
+
 
         val mail = intent.getStringExtra("own_mail").toString()
 
 
-//        val getImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
-//
-//            val source = ImageDecoder.createSource(this.contentResolver, it)
-//            val bitmap = ImageDecoder.decodeBitmap(source)
-//
-//            uri = "$mail/$uuid.jpg"
-//
-//            updatePic(bitmap, preview)
-//
-//
-//            Log.d("prima di database", "$uuid $uri")
-//            uploadImageToDB(it, uri)
-//        }
+        val getImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
 
-//        addImage.setOnClickListener {
-//            getImage.launch("image/*")
-//        }
+            val imageURI: Uri = it
+
+            val pPicRef = storageReference.child("$mail/$uuid.jpg")
+
+            pPicRef.putFile(it).addOnSuccessListener {
+                loading.visibility = View.INVISIBLE
+                Snackbar.make(
+                    findViewById(android.R.id.content),
+                    "Image Uploaded",
+                    Snackbar.LENGTH_LONG
+                ).show()
+                preview.setImageURI(imageURI)
+            }.addOnProgressListener() {
+                loading.visibility = View.VISIBLE
+            }
+        }
+
+        addImage.setOnClickListener {
+            getImage.launch("image/*")
+        }
 
         createButton.setOnClickListener {
-
+            loading.visibility = View.VISIBLE
             //uri = "$mail/$uuid.jpg"
             //Log.d("quale è uuuidididid", "$uuid $uri")
-
             val text = findViewById<EditText>(R.id.MultiLineCreate).getText().toString()
-            var uri : String = ""
+            var uri: String = ""
 
-            Log.d("POST", "$mail $text $uri")
-            // Create a new user with a first, middle, and last name
-            val post = hashMapOf(
-                "user" to mail,
-                "text" to text,
-                "picture" to ""
-            )
+            storage.getReference("$mail/$uuid.jpg").downloadUrl.addOnSuccessListener {
+                uri=it.toString()
 
-            // Add a new document with a generated ID
-            db.collection("posts")
-                .add(post)
-                .addOnSuccessListener { documentReference ->
-                    Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "Error adding document", e)
-                }
+            }.addOnFailureListener() {
+                uri=""
+            }.addOnCompleteListener(){
+                loading.visibility = View.INVISIBLE
+                Log.d("POST", "$mail $text $uri")
+                // Create a new user with a first, middle, and last name
+                val post = hashMapOf(
+                    "user" to mail,
+                    "text" to text,
+                    "picture" to uri
+                )
 
-            val intent = Intent(this, HomeActivity::class.java)
-            intent.putExtra("own_mail", mail)
-            startActivity(intent)
+                // Add a new document with a generated ID
+                db.collection("posts")
+                    .add(post)
+                    .addOnSuccessListener { documentReference ->
+                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(TAG, "Error adding document", e)
+                    }
+
+                val intent = Intent(this, HomeActivity::class.java)
+                intent.putExtra("own_mail", mail)
+                startActivity(intent)
+            }
         }
     }
 

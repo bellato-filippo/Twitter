@@ -7,8 +7,10 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.twittermusk.adapter.PostAdapter
@@ -21,6 +23,7 @@ class HomeActivity : AppCompatActivity() {
     var myDataset = mutableListOf<Post>()
     lateinit var recyclerView: RecyclerView
     var ownMail: String = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

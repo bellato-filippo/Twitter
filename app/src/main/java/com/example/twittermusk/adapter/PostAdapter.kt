@@ -10,10 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.twittermusk.HomeActivity
 import com.example.twittermusk.R
 import com.example.twittermusk.models.Post
@@ -28,14 +30,15 @@ class PostAdapter(
     private val self: String,
     private val other: String,
     private val keys: List<String>
-    ): RecyclerView.Adapter<PostAdapter.ItemViewHolder>() {
+) : RecyclerView.Adapter<PostAdapter.ItemViewHolder>() {
 
-    class ItemViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
+    class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         val textViewUser: TextView = view.findViewById(R.id.postUser)
         val textViewText: TextView = view.findViewById(R.id.postText)
         val buttonFollow: Button = view.findViewById<Button>(R.id.followButton)
         val buttonLike: Button = view.findViewById(R.id.likeButton)
         val like: TextView = view.findViewById(R.id.like)
+        val imageViewImage: ImageView = view.findViewById(R.id.postImage)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -53,6 +56,11 @@ class PostAdapter(
         val item = dataSet[position]
         holder.textViewUser.text = item.user
         holder.textViewText.text = item.text
+        holder.imageViewImage.setImageResource(0)
+
+        if (item.picture != "")
+            Glide.with(context).load("${item.picture}").into(holder.imageViewImage)
+
         holder.buttonFollow.setOnClickListener {
             if (self.equals(other)) {
                 Toast.makeText(context, "You can't follow yourself", Toast.LENGTH_SHORT).show()
@@ -68,7 +76,8 @@ class PostAdapter(
                     }
 
                     if (me.contains(other)) {
-                        Toast.makeText(context, "You already follow this user", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "You already follow this user", Toast.LENGTH_SHORT)
+                            .show()
                     } else {
                         val f = hashMapOf(
                             "me" to self,
@@ -78,7 +87,10 @@ class PostAdapter(
                         Firebase.firestore.collection("follow")
                             .add(f)
                             .addOnSuccessListener { documentReference ->
-                                Log.d(ContentValues.TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                                Log.d(
+                                    ContentValues.TAG,
+                                    "DocumentSnapshot added with ID: ${documentReference.id}"
+                                )
                             }
                             .addOnFailureListener { e ->
                                 Log.w(ContentValues.TAG, "Error adding document", e)
@@ -99,7 +111,8 @@ class PostAdapter(
                     }
 
                     if (me.contains(keys[position])) {
-                        Toast.makeText(context, "You already liked this post", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "You already liked this post", Toast.LENGTH_SHORT)
+                            .show()
                     } else {
                         val l = hashMapOf(
                             "user" to self,
@@ -108,7 +121,10 @@ class PostAdapter(
                         Firebase.firestore.collection("like")
                             .add(l)
                             .addOnSuccessListener { documentReference ->
-                                Log.d(ContentValues.TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                                Log.d(
+                                    ContentValues.TAG,
+                                    "DocumentSnapshot added with ID: ${documentReference.id}"
+                                )
                                 Firebase.firestore.collection("like")
                                     .whereEqualTo("post", keys[position])
                                     .get()
