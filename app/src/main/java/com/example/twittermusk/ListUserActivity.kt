@@ -24,7 +24,7 @@ class ListUserActivity : AppCompatActivity() {
 
         ownMail = intent.getStringExtra("own_mail").toString()
         otherMail = intent.getStringExtra("other_mail").toString()
-
+//test
         Log.d("DEBUG", ownMail)
         Log.d("DEBUG", otherMail)
 
